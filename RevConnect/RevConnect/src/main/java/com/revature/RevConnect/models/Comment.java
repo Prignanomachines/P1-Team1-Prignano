@@ -1,10 +1,16 @@
 package com.revature.RevConnect.models;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name="Comment")
 public class Comment {
 
     //Comment info
 
     //Primary key for identification
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     int commentID;
 
     //This is the content of the comment

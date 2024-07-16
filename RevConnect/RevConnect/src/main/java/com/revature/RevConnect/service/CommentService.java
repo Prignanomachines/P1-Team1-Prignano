@@ -1,6 +1,8 @@
 package com.revature.RevConnect.service;
 
 import com.revature.RevConnect.models.Comment;
+import com.revature.RevConnect.repositories.CommentRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -8,14 +10,15 @@ import java.util.List;
 @Service
 public class CommentService {
 
-    //TODO: add
-    void addComment(Comment c) {
+    @Autowired
+    private CommentRepository commentRepository;
 
+    void addComment(Comment c) {
+        commentRepository.save(c);
     }
 
-    //TODO: delete
     void deleteComment(Comment c) {
-
+        commentRepository.delete(c);
     }
 
     //TODO: update
@@ -23,10 +26,9 @@ public class CommentService {
 
     }
 
-    //TODO: get
     List<Comment> getCommentsByPost(int postID) {
 
-        return null;
+        return commentRepository.findByPostID(postID);
     }
 
 }
