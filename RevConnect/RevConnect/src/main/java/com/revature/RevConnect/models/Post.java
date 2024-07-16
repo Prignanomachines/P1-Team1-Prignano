@@ -19,6 +19,8 @@ public class Post {
     //TODO: add image support, also expand into post header, body text, body image. For now, its just a text.
     String post;
 
+    int userID;
+
     public String getPost() {
         return post;
     }
@@ -35,4 +37,11 @@ public class Post {
         this.postID = postID;
     }
 
+    public int getUserID() {
+        return userID;
+    }
+
+    public void setUserID(int userID) {
+        this.userID = userID;
+    }
 }

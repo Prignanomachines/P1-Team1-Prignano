@@ -9,6 +9,7 @@ import com.revature.RevConnect.service.PostService;
 import com.revature.RevConnect.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,6 +25,11 @@ public class ControllerREST {
 
     @Autowired
     CommentService commentService;
+
+    @GetMapping("/ping")
+    public String ping() {
+        return "pong";
+    }
 
     @PostMapping("/register")
     public ResponseEntity registerUser(@RequestBody User user) {
