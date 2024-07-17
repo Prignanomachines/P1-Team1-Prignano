@@ -32,7 +32,7 @@ public class ControllerREST {
     }
 
     @PostMapping("/register")
-    public ResponseEntity registerUser(@RequestBody User user) {
+    public ResponseEntity<String> registerUser(@RequestBody User user) {
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         if (user.getPassword().length() >= 4 && !user.getUsername().isEmpty()) {
             if (userService.getUser(user.getUsername()) == null) {
@@ -51,7 +51,7 @@ public class ControllerREST {
     }
 
     @PostMapping("/login")
-    public ResponseEntity loginUser(@RequestBody User user) {
+    public ResponseEntity<String> loginUser(@RequestBody User user) {
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         if (userService.getUser(user.getUsername()) != null) {
             User result = userService.getUser(user.getUsername());

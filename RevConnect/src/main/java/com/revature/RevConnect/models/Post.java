@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name="Post")
+@Table(name="Posts")
 public class Post {
 
     //Post info

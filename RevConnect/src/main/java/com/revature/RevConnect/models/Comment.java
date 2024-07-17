@@ -3,7 +3,7 @@ package com.revature.RevConnect.models;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name="Comment")
+@Table(name="Comments")
 public class Comment {
 
     //Comment info

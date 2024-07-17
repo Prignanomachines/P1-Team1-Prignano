@@ -3,7 +3,7 @@ package com.revature.RevConnect.models;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name="Like")
+@Table(name="Likes")
 public class Like {
 
     @Id
