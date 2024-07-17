@@ -10,13 +10,16 @@ public class Comment {
 
     //Primary key for identification
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="COMMENT_ID")
     int commentID;
 
     //This is the content of the comment
+    @Column(name="COMMENT")
     String comment;
 
     //The ID of the post
+    @Column(name="POST_ID")
     int postID;
 
     public int getCommentID() {

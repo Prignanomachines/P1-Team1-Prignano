@@ -13,16 +13,25 @@ public class User {
 
     //Primary key for identification
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="USER_ID")
     int userID;
 
     //Display info
+    @Column(name="USERNAME")
     String username;
+
+    @Column(name="FIRSTNAME")
     String firstname;
+
+    @Column(name="LASTNAME")
     String lastname;
+
+    @Column(name="BIO")
     String bio;
 
-    //authentication
+    //authentication TODO: encrypt
+    @Column(name="PASSWORD")
     String password;
 
     public int getUserID() {

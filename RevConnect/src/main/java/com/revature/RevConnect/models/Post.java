@@ -13,12 +13,15 @@ public class Post {
 
     //Primary key for identification
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="POST_ID")
     int postID;
 
     //TODO: add image support, also expand into post header, body text, body image. For now, its just a text.
+    @Column(name="POST")
     String post;
 
+    @Column(name="USER_ID")
     int userID;
 
     public String getPost() {

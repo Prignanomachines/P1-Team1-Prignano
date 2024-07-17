@@ -7,12 +7,16 @@ import jakarta.persistence.*;
 public class Like {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="LIKE_ID")
     int likeID;
 
     //PostID
+    @Column(name="POST_ID")
     int postID;
+
     //userID
+    @Column(name="USER_ID")
     int userID;
 
     public int getLikeID() {
