@@ -14,26 +14,23 @@ public class PostService {
     @Autowired
     private PostRepository postRepository;
 
-    void addPost(Post post) {
+    public void addPost(Post post) {
         postRepository.save(post);
     }
 
-    void deletePost(Post post) {
+    public void deletePost(Post post) {
         postRepository.delete(post);
     }
 
     //TODO: update
-    void updatePost(Post post) {
-
+    public void updatePost(Post post) {
     }
 
-    Post getPostById(int postID) {
-
+    public Post getPostById(int postID) {
         return postRepository.findByPostID(postID);
     }
 
-    List<Post> getPostsByAuthor(int userID) {
-
+    public List<Post> getPostsByAuthor(int userID) {
         return postRepository.findByUserID(userID);
     }
 
