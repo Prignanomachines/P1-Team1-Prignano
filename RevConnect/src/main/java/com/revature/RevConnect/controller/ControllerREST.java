@@ -3,16 +3,15 @@ package com.revature.RevConnect.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+import com.revature.RevConnect.models.Like;
 import com.revature.RevConnect.models.User;
 import com.revature.RevConnect.service.CommentService;
+import com.revature.RevConnect.service.LikeService;
 import com.revature.RevConnect.service.PostService;
 import com.revature.RevConnect.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class ControllerREST {
@@ -25,6 +24,9 @@ public class ControllerREST {
 
     @Autowired
     CommentService commentService;
+
+    @Autowired
+    LikeService likeService;
 
     @GetMapping("/ping")
     public String ping() {
@@ -66,6 +68,16 @@ public class ControllerREST {
             else return ResponseEntity.status(409).body("Password was incorrect.");
         }
         else return ResponseEntity.status(409).body("Username not found.");
+    }
+
+    @PutMapping("/like/{postId}/{userId}")
+    public ResponseEntity<String> addLike(@PathVariable int postId, @PathVariable int userId) { // TODO: Refactor with cookie
+        if (likeService.findByPostIdAndUserId(postId, userId).isEmpty()) {
+            Like like = new Like(postId, userId);
+            likeService.addLike(like);
+            return ResponseEntity.status(200).body("Like added.");
+        }
+        return ResponseEntity.status(400).body("You have already liked this post.");
     }
 
 }

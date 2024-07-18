@@ -19,6 +19,12 @@ public class Like {
     @Column(name="USER_ID")
     int userID;
 
+    //Constructor
+    public Like (int postID, int userID) {
+        this.postID = postID;
+        this.userID = userID;
+    }
+
     public int getLikeID() {
         return likeID;
     }
