@@ -13,22 +13,25 @@ public class CommentService {
     @Autowired
     private CommentRepository commentRepository;
 
-    void addComment(Comment c) {
+    public void addComment(Comment c) {
         commentRepository.save(c);
     }
 
-    void deleteComment(Comment c) {
+    public void deleteComment(Comment c) {
         commentRepository.delete(c);
     }
 
     //TODO: update
-    void updateComment(Comment c) {
+    public void updateComment(Comment c) {
 
     }
 
-    List<Comment> getCommentsByPost(int postID) {
-
+    public List<Comment> getCommentsByPost(int postID) {
         return commentRepository.findByPostID(postID);
+    }
+
+    public List<Comment> getCommentsByPostAndUser(int postID, int commentID) {
+        return commentRepository.findByPostIDAndCommentID(postID, commentID);
     }
 
 }
