@@ -84,8 +84,6 @@ public class ControllerREST {
         return ResponseEntity.ok(posts);
     }
 
-    @GetMapping("/post")
-
     //Need to verify that a specific
     @PostMapping("/post")
     public ResponseEntity<?> createPost(@RequestBody Post post){
@@ -112,10 +110,6 @@ public class ControllerREST {
         return ResponseEntity.ok(updatedPost);
     }
 
-
-
-
-=======
     @DeleteMapping("/like/{postID}/{userID}")
     public ResponseEntity<String> deleteLike(@PathVariable int postID, @PathVariable int userID) { // TODO: Refactor with cookie
         if (!likeService.findByPostIDAndUserID(postID, userID).isEmpty()) {
