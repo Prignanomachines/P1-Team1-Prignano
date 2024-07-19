@@ -3,15 +3,19 @@ package com.revature.RevConnect.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+import com.revature.RevConnect.models.Follow;
+import com.revature.RevConnect.models.Post;
 import com.revature.RevConnect.models.Like;
 import com.revature.RevConnect.models.User;
 import com.revature.RevConnect.service.CommentService;
+import com.revature.RevConnect.service.FollowService;
 import com.revature.RevConnect.service.LikeService;
 import com.revature.RevConnect.service.PostService;
 import com.revature.RevConnect.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
 @RestController
 public class ControllerREST {
@@ -27,6 +31,9 @@ public class ControllerREST {
 
     @Autowired
     LikeService likeService;
+
+    @Autowired
+    FollowService followService;
 
     @GetMapping("/ping")
     public String ping() {
@@ -80,4 +87,33 @@ public class ControllerREST {
         return ResponseEntity.status(400).body("You have already liked this post.");
     }
 
+    @PostMapping("/follow")
+    public ResponseEntity<String> addFollow(@RequestBody Follow follow) {
+        followService.addFollow(follow);
+        return ResponseEntity.status(200).body("Successfully followed.");
+    }
+
+    @GetMapping("/follows/follower/{followerID}")
+    public ResponseEntity<List<Follow>> getFollowsByFollowerID(@PathVariable int followerID) {
+        List<Follow> follows = followService.findByFollowerID(followerID);
+        return ResponseEntity.status(200).body(follows);
+    }
+
+    @GetMapping("/follows/following/{followingID}")
+    public ResponseEntity<List<Follow>> getFollowsByFollowingID(@PathVariable int followingID) {
+        List<Follow> follows = followService.findByFollowingID(followingID);
+        return ResponseEntity.status(200).body(follows);
+    }
+
+    @GetMapping("/follows/check")
+    public ResponseEntity<Boolean> isFollowerIDFollowingFollowingID(@RequestParam int followerID, @RequestParam int followingID) {
+        boolean isFollowing = followService.existsByFollowerIDAndFollowingID(followerID, followingID);
+        return ResponseEntity.status(200).body(isFollowing);
+    }
+
+    @DeleteMapping("/unfollow")
+    public ResponseEntity<String> unfollow(@RequestParam int followerID, @RequestParam int followingID) {
+        followService.unfollow(followerID, followingID);
+        return ResponseEntity.status(200).body("Successfully unfollowed.");
+    }
 }
