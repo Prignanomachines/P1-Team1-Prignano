@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface LikeRepository extends JpaRepository<Like,Integer> {
-    List<Like> findByPostIDAndUserID(int postID, int userID);
+    List<Like> findByPostIDAndUserID(int postId, int userId);
 }
