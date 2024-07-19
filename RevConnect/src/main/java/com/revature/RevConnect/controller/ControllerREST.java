@@ -11,6 +11,7 @@ import com.revature.RevConnect.service.LikeService;
 import com.revature.RevConnect.service.PostService;
 import com.revature.RevConnect.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -75,5 +76,36 @@ public class ControllerREST {
         List<Post> posts = postService.getPostsByAuthor(userID);
         return ResponseEntity.ok(posts);
     }
+
+    @GetMapping("/post")
+
+    //Need to verify that a specific
+    @PostMapping("/post")
+    public ResponseEntity<?> createPost(@RequestBody Post post){
+        //need any flow control?
+        Post newPost = postService.addPost(post);
+        return ResponseEntity.ok(newPost);
+    }
+
+    //authentication wait for userID
+    @DeleteMapping("/post/{postID}")
+    public ResponseEntity<?> deletePost(@PathVariable int postID){
+        Post newPost = postService.getPostById(postID);
+        if(newPost == null){
+            return ResponseEntity.status(400).body("Post is null, not found?");
+        }
+        postService.deletePost(newPost);
+        return ResponseEntity.ok("Post deleted");
+    }
+
+    //dont need {post} in uri right? because we aren't pathing to the {post}
+    @PatchMapping("/post/{postID}")
+    public ResponseEntity<?> updatePost(@PathVariable int postID, @RequestBody Post post){
+        Post updatedPost = postService.updatePost(postID, post);
+        return ResponseEntity.ok(updatedPost);
+    }
+
+
+
 
 }
