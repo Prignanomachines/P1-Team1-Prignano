@@ -3,6 +3,7 @@ package com.revature.RevConnect.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+import com.revature.RevConnect.models.Comment;
 import com.revature.RevConnect.models.Follow;
 import com.revature.RevConnect.models.Post;
 import com.revature.RevConnect.models.Like;
@@ -77,14 +78,39 @@ public class ControllerREST {
         else return ResponseEntity.status(409).body("Username not found.");
     }
 
-    @PutMapping("/like/{postId}/{userId}")
-    public ResponseEntity<String> addLike(@PathVariable int postId, @PathVariable int userId) { // TODO: Refactor with cookie
-        if (likeService.findByPostIdAndUserId(postId, userId).isEmpty()) {
-            Like like = new Like(postId, userId);
+    @PutMapping("/like/{postID}/{userID}")
+    public ResponseEntity<String> addLike(@PathVariable int postID, @PathVariable int userID) { // TODO: Refactor with cookie
+        if (likeService.findByPostIDAndUserID(postID, userID).isEmpty()) {
+            Like like = new Like(postID, userID);
             likeService.addLike(like);
             return ResponseEntity.status(200).body("Like added.");
         }
         return ResponseEntity.status(400).body("You have already liked this post.");
+    }
+
+    @DeleteMapping("/like/{postID}/{userID}")
+    public ResponseEntity<String> deleteLike(@PathVariable int postID, @PathVariable int userID) { // TODO: Refactor with cookie
+        if (!likeService.findByPostIDAndUserID(postID, userID).isEmpty()) {
+            Like like = new Like(postID, userID);
+            likeService.deleteLike(like);
+            return ResponseEntity.status(200).body("Like deleted.");
+        }
+        return ResponseEntity.status(404).body("Like not found.");
+    }
+
+    @PutMapping("/comment/{postID}")
+    public ResponseEntity<String> addComment(@PathVariable int postID) {
+        Comment comment = new Comment(postID);
+        commentService.addComment(comment);
+        return ResponseEntity.status(200).body("Comment added.");
+    }
+
+    @DeleteMapping("/comment/{postID}/{commentID}")
+    public ResponseEntity<String> deleteComment(@PathVariable int postID, @PathVariable int commentID) {
+        if (!commentService.getCommentsByPostAndUser(postID, commentID).isEmpty()) {
+            return ResponseEntity.status(200).body("Comment deleted.");
+        }
+        return ResponseEntity.status(404).body("Comment not found.");
     }
 
     @PostMapping("/follow")
