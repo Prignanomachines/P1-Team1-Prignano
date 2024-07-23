@@ -12,10 +12,16 @@ import com.revature.RevConnect.service.FollowService;
 import com.revature.RevConnect.service.LikeService;
 import com.revature.RevConnect.service.PostService;
 import com.revature.RevConnect.service.UserService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.revature.RevConnect.service.JwtTokenService;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class ControllerREST {
@@ -35,17 +41,28 @@ public class ControllerREST {
     @Autowired
     FollowService followService;
 
+    @Autowired
+    JwtTokenService tokenService;
+
     @GetMapping("/ping")
     public String ping() {
         return "pong";
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> registerUser(@RequestBody User user) {
+    public ResponseEntity<String> registerUser(@RequestBody User user, HttpServletResponse response) {
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         if (user.getPassword().length() >= 4 && !user.getUsername().isEmpty()) {
             if (userService.getUser(user.getUsername()) == null) {
                 User result = userService.addUser(user);
+
+                Map<String, String> claimsMap = new HashMap<>();
+                claimsMap.put("username", result.getUsername());
+                claimsMap.put("userID", String.valueOf(result.getUserID()));
+
+                Cookie cookie = new Cookie("Authentication", this.tokenService.generateToken(claimsMap));
+                response.addCookie(cookie);
+
                 try {
                     String jsonStr = ow.writeValueAsString(result);
                     return ResponseEntity.status(200).body(jsonStr);
@@ -60,11 +77,19 @@ public class ControllerREST {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> loginUser(@RequestBody User user) {
+    public ResponseEntity<String> loginUser(@RequestBody User user, HttpServletResponse response) {
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         if (userService.getUser(user.getUsername()) != null) {
             User result = userService.getUser(user.getUsername());
             if (result.getPassword().equals(user.getPassword())) {
+
+                Map<String, String> claimsMap = new HashMap<>();
+                claimsMap.put("username", result.getUsername());
+                claimsMap.put("userID", String.valueOf(result.getUserID()));
+
+                Cookie cookie = new Cookie("Authentication", this.tokenService.generateToken(claimsMap));
+                response.addCookie(cookie);
+
                 try {
                     String jsonStr = ow.writeValueAsString(result);
                     return ResponseEntity.status(200).body(jsonStr);
@@ -77,15 +102,21 @@ public class ControllerREST {
         else return ResponseEntity.status(409).body("Username not found.");
     }
 
-    @PutMapping("/like/{postID}/{userID}")
-    public ResponseEntity<String> addLike(@PathVariable int postID, @PathVariable int userID) { // TODO: Refactor with cookie
-        if (likeService.findByPostIDAndUserID(postID, userID).isEmpty()) {
-            Like like = new Like(postID, userID);
-            likeService.addLike(like);
-            return ResponseEntity.status(200).body("Like added.");
+    //This is an example of using the auth to grab the userID, You guys can set up the rest of the methods to use auth
+    @PutMapping("/like/{postID}")
+    public ResponseEntity<String> addLike(@CookieValue("Authentication") String bearerToken, @PathVariable int postID) {
+        Integer userID = authenticateAndReturnID(bearerToken);
+        if (userID != null) {
+            if (likeService.findByPostIDAndUserID(postID, userID).isEmpty()) {
+                Like like = new Like(postID, userID);
+                likeService.addLike(like);
+                return ResponseEntity.status(200).body("Like added.");
+            }
         }
         return ResponseEntity.status(400).body("You have already liked this post.");
     }
+
+    // TODO: Refactor authentication required methods bellow with cookie
 
     @PostMapping("/follow")
     public ResponseEntity<String> addFollow(@RequestBody Follow follow) {
@@ -117,4 +148,23 @@ public class ControllerREST {
         return ResponseEntity.status(200).body("Successfully unfollowed.");
     }
 
+    //Given a token string, return the authenticated users ID
+    private Integer authenticateAndReturnID(String token) {
+        //Get token
+        int userID = tokenService.returnAuthID(token);
+
+        System.out.println(userID);
+
+        //Using the ID, get the user associated with it
+        User u = userService.getUser(userID);
+
+        //Authenticate
+        if (tokenService.validateAuthentication(token, u.getUsername())) {
+            //return token
+            return userID;
+        }
+
+        //Authentication failed
+        return null;
+    }
 }

@@ -25,6 +25,8 @@ public class Like {
         this.userID = userID;
     }
 
+    public Like() {}
+
     public int getLikeID() {
         return likeID;
     }
