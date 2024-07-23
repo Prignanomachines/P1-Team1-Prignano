@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.revature.RevConnect.models.Follow;
-import com.revature.RevConnect.models.Post;
 import com.revature.RevConnect.models.Like;
 import com.revature.RevConnect.models.User;
 import com.revature.RevConnect.service.*;
@@ -13,9 +12,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.revature.RevConnect.models.Message;
 
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,9 +34,6 @@ public class ControllerREST {
 
     @Autowired
     FollowService followService;
-
-    @Autowired
-    MessageService messageService;
 
     @Autowired
     JwtTokenService tokenService;
@@ -146,49 +140,6 @@ public class ControllerREST {
     public ResponseEntity<String> unfollow(@RequestParam int followerID, @RequestParam int followingID) {
         followService.unfollow(followerID, followingID);
         return ResponseEntity.status(200).body("Successfully unfollowed.");
-    }
-
-    @PostMapping("/message")
-    public ResponseEntity<String> sendMessage(@RequestBody Message message) {
-        message.setTimestamp(LocalDateTime.now());
-        messageService.addMessage(message);
-        return ResponseEntity.status(200).body("Message sent.");
-    }
-
-    @GetMapping("/messages")
-    public ResponseEntity<List<Message>> getAllMessages() {
-        List<Message> messages = messageService.findAllMessages();
-        return ResponseEntity.status(200).body(messages);
-    }
-
-    @GetMapping("/messages/sender/{senderID}")
-    public ResponseEntity<List<Message>> getMessagesBySender(@PathVariable int senderID) {
-        User sender = userService.getUser(senderID);
-        if (sender != null) {
-            List<Message> messages = messageService.findBySender(sender);
-            return ResponseEntity.status(200).body(messages);
-        }
-        return ResponseEntity.status(404).body(null);
-    }
-
-    @DeleteMapping("/message/{messageID}")
-    public ResponseEntity<String> deleteMessage(@PathVariable Long messageID) {
-        if (messageService.existsById(messageID)) {
-            messageService.deleteMessage(messageID);
-            return ResponseEntity.status(200).body("Message deleted.");
-        }
-        return ResponseEntity.status(404).body("Message not found.");
-    }
-
-    @GetMapping("/messages/{senderID}/{receiverID}")
-    public ResponseEntity<List<Message>> getMessagesBetweenUsers(@PathVariable int senderID, @PathVariable int receiverID) {
-        User sender = userService.getUser(senderID);
-        User receiver = userService.getUser(receiverID);
-        if (sender != null && receiver != null) {
-            List<Message> messages = messageService.findMessagesBetweenUsers(sender, receiver);
-            return ResponseEntity.status(200).body(messages);
-        }
-        return ResponseEntity.status(404).body(null);
     }
 
     //Given a token string, return the authenticated users ID
