@@ -44,6 +44,7 @@ public class ControllerREST {
     }
 
     @PostMapping("/register")
+    @CrossOrigin(allowCredentials = "true", origins = "http://localhost:3000", methods=RequestMethod.POST)
     public ResponseEntity<String> registerUser(@RequestBody User user, HttpServletResponse response) {
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         if (user.getPassword().length() >= 4 && !user.getUsername().isEmpty()) {
@@ -71,6 +72,7 @@ public class ControllerREST {
     }
 
     @PostMapping("/login")
+    @CrossOrigin(allowCredentials = "true", origins = "http://localhost:3000", methods=RequestMethod.POST)
     public ResponseEntity<String> loginUser(@RequestBody User user, HttpServletResponse response) {
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         if (userService.getUser(user.getUsername()) != null) {
@@ -98,8 +100,12 @@ public class ControllerREST {
 
     //This is an example of using the auth to grab the userID, You guys can set up the rest of the methods to use auth
     @PutMapping("/like/{postID}")
+    @CrossOrigin(allowCredentials = "true", origins = "http://localhost:3000", methods=RequestMethod.PUT)
     public ResponseEntity<String> addLike(@CookieValue("Authentication") String bearerToken, @PathVariable int postID) {
         Integer userID = authenticateAndReturnID(bearerToken);
+
+        System.out.println(userID);
+
         if (userID != null) {
             if (likeService.findByPostIDAndUserID(postID, userID).isEmpty()) {
                 Like like = new Like(postID, userID);
@@ -113,30 +119,35 @@ public class ControllerREST {
     // TODO: Refactor authentication required methods bellow with cookie
 
     @PostMapping("/follow")
+    @CrossOrigin(allowCredentials = "true", origins = "http://localhost:3000", methods=RequestMethod.POST)
     public ResponseEntity<String> addFollow(@RequestBody Follow follow) {
         followService.addFollow(follow);
         return ResponseEntity.status(200).body("Successfully followed.");
     }
 
     @GetMapping("/follows/follower/{followerID}")
+    @CrossOrigin(allowCredentials = "true", origins = "http://localhost:3000", methods=RequestMethod.GET)
     public ResponseEntity<List<Follow>> getFollowsByFollowerID(@PathVariable int followerID) {
         List<Follow> follows = followService.findByFollowerID(followerID);
         return ResponseEntity.status(200).body(follows);
     }
 
     @GetMapping("/follows/following/{followingID}")
+    @CrossOrigin(allowCredentials = "true", origins = "http://localhost:3000", methods=RequestMethod.GET)
     public ResponseEntity<List<Follow>> getFollowsByFollowingID(@PathVariable int followingID) {
         List<Follow> follows = followService.findByFollowingID(followingID);
         return ResponseEntity.status(200).body(follows);
     }
 
     @GetMapping("/follows/check")
+    @CrossOrigin(allowCredentials = "true", origins = "http://localhost:3000", methods=RequestMethod.GET)
     public ResponseEntity<Boolean> isFollowerIDFollowingFollowingID(@RequestParam int followerID, @RequestParam int followingID) {
         boolean isFollowing = followService.existsByFollowerIDAndFollowingID(followerID, followingID);
         return ResponseEntity.status(200).body(isFollowing);
     }
 
     @DeleteMapping("/unfollow")
+    @CrossOrigin(allowCredentials = "true", origins = "http://localhost:3000", methods=RequestMethod.DELETE)
     public ResponseEntity<String> unfollow(@RequestParam int followerID, @RequestParam int followingID) {
         followService.unfollow(followerID, followingID);
         return ResponseEntity.status(200).body("Successfully unfollowed.");
