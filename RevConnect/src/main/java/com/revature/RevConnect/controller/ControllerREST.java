@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import com.revature.RevConnect.models.Follow;
 import com.revature.RevConnect.models.Like;
 import com.revature.RevConnect.models.User;
+import com.revature.RevConnect.models.Comment;
 import com.revature.RevConnect.models.Post;
 import com.revature.RevConnect.service.*;
 import jakarta.servlet.http.Cookie;
@@ -214,7 +215,30 @@ public class ControllerREST {
         Post updatedPost = postService.updatePost(post);
         return ResponseEntity.ok(updatedPost);
     }
+    @DeleteMapping("/like/{postID}/{userID}")
+    public ResponseEntity<String> deleteLike(@PathVariable int postID, @PathVariable int userID) { // TODO: Refactor with cookie
+        if (!likeService.findByPostIDAndUserID(postID, userID).isEmpty()) {
+            Like like = new Like(postID, userID);
+            likeService.deleteLike(like);
+            return ResponseEntity.status(200).body("Like deleted.");
+        }
+        return ResponseEntity.status(404).body("Like not found.");
+    }
 
+    @PutMapping("/comment/{postID}")
+    public ResponseEntity<String> addComment(@PathVariable int postID) {
+        Comment comment = new Comment(postID);
+        commentService.addComment(comment);
+        return ResponseEntity.status(200).body("Comment added.");
+    }
+
+    @DeleteMapping("/comment/{postID}/{commentID}")
+    public ResponseEntity<String> deleteComment(@PathVariable int postID, @PathVariable int commentID) {
+        if (!commentService.getCommentsByPostAndUser(postID, commentID).isEmpty()) {
+            return ResponseEntity.status(200).body("Comment deleted.");
+        }
+        return ResponseEntity.status(404).body("Comment not found.");
+    }
     //Given a token string, return the authenticated users ID
     private Integer authenticateAndReturnID(String token) {
         //Get token

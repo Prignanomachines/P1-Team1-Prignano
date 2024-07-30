@@ -22,6 +22,12 @@ public class Comment {
     @Column(name="POST_ID")
     int postID;
 
+    public Comment(int postID) {
+        this.postID = postID;
+    }
+
+    public Comment() {}
+
     public int getCommentID() {
         return commentID;
     }
