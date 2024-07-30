@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import com.revature.RevConnect.models.Follow;
 import com.revature.RevConnect.models.Like;
 import com.revature.RevConnect.models.User;
+import com.revature.RevConnect.models.Post;
 import com.revature.RevConnect.service.*;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
@@ -162,6 +163,50 @@ public class ControllerREST {
     public ResponseEntity<String> unfollow(@RequestParam int followerID, @RequestParam int followingID) {
         followService.unfollow(followerID, followingID);
         return ResponseEntity.status(200).body("Successfully unfollowed.");
+    }
+
+    //This is Zachs code: TODO use Auth cookie to get userID serverside.
+    //Getting all of the posts associated by UserID
+    @GetMapping("/post/{userID}")
+    public ResponseEntity<?> getPostsByUser(@PathVariable int userID){
+        List<Post> posts = postService.getPostsByAuthor(userID);
+        return ResponseEntity.ok(posts);
+    }
+
+    //Get the feed of posts
+    @GetMapping("/post")
+    public ResponseEntity<?> getPostsAll(){
+        List<Post> posts = postService.getAllPosts();
+        return ResponseEntity.ok(posts);
+    }
+
+    //Need to verify that a specific
+    @PostMapping("/post")
+    public ResponseEntity<?> createPost(@RequestBody Post post){
+        //Get USERID for post using authenticateAndReturnID();
+
+        //need any flow control?
+        Post newPost = postService.addPost(post);
+        return ResponseEntity.ok(newPost);
+    }
+
+    //authentication wait for userID
+    @DeleteMapping("/post/{postID}")
+    public ResponseEntity<?> deletePost(@PathVariable int postID){
+        //Get USERID for post using authenticateAndReturnID();
+        Post newPost = postService.getPostById(postID);
+        if(newPost == null){
+            return ResponseEntity.status(400).body("Post is null, not found?");
+        }
+        postService.deletePost(newPost);
+        return ResponseEntity.ok("Post deleted");
+    }
+
+    @PatchMapping("/post")
+    public ResponseEntity<?> updatePost(@RequestBody Post post){
+        //Get USERID for post using authenticateAndReturnID();
+        Post updatedPost = postService.updatePost(post);
+        return ResponseEntity.ok(updatedPost);
     }
 
     //Given a token string, return the authenticated users ID
