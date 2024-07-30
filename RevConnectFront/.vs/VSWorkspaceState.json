@@ -4,8 +4,9 @@
     "\\public",
     "\\src",
     "\\src\\Components",
-    "\\src\\Components\\LoginRegister"
+    "\\src\\Components\\LoginRegister",
+    "\\src\\Components\\Posts"
   ],
-  "SelectedNode": "\\src\\Components\\LoginRegister\\Login.tsx",
+  "SelectedNode": "\\src\\Components\\Posts\\PostFeed.tsx",
   "PreviewInSolutionExplorer": false
 }

@@ -3,6 +3,8 @@ package com.revature.RevConnect.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+import com.revature.RevConnect.DTOS.CommentDTO;
+import com.revature.RevConnect.DTOS.PostDTO;
 import com.revature.RevConnect.models.Follow;
 import com.revature.RevConnect.models.Like;
 import com.revature.RevConnect.models.User;
@@ -15,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -176,7 +179,23 @@ public class ControllerREST {
     @CrossOrigin(allowCredentials = "true", origins = "http://localhost:3000")
     public ResponseEntity<?> getPostsAll(){
         List<Post> posts = postService.getAllPosts();
-        return ResponseEntity.ok(posts);
+        List<PostDTO> toReturn = new ArrayList<>();
+        for (int i = 0; i < posts.size(); i++) {
+            String author = userService.getUser(posts.get(i).getUserID()).getUsername();
+            List<Like> likes = likeService.getLikesByPostID(posts.get(i).getPostID());
+            List<Comment> comments = commentService.getCommentsByPost(posts.get(i).getPostID());
+            List<CommentDTO> commentDTOS = new ArrayList<>();
+
+            for (int j = 0; j < comments.size(); j++) {
+                String a = userService.getUser(comments.get(i).getAuthorID()).getUsername();
+                commentDTOS.add(new CommentDTO(comments.get(j).getCommentID(), comments.get(j).getComment(), a));
+            }
+
+            PostDTO d = new PostDTO(posts.get(i).getPostID(), posts.get(i).getPost(), author, likes.size(), commentDTOS);
+
+            toReturn.add(d);
+        }
+        return ResponseEntity.ok(toReturn);
     }
 
     //Need to verify that a specific
@@ -196,6 +215,7 @@ public class ControllerREST {
 
     //authentication wait for userID
     @DeleteMapping("/post/{postID}")
+    @CrossOrigin(allowCredentials = "true", origins = "http://localhost:3000")
     public ResponseEntity<?> deletePost(@PathVariable int postID){
         //Get USERID for post using authenticateAndReturnID();
         Post newPost = postService.getPostById(postID);
@@ -207,12 +227,14 @@ public class ControllerREST {
     }
 
     @PatchMapping("/post")
+    @CrossOrigin(allowCredentials = "true", origins = "http://localhost:3000")
     public ResponseEntity<?> updatePost(@RequestBody Post post){
         //Get USERID for post using authenticateAndReturnID();
         Post updatedPost = postService.updatePost(post);
         return ResponseEntity.ok(updatedPost);
     }
     @DeleteMapping("/like/{postID}")
+    @CrossOrigin(allowCredentials = "true", origins = "http://localhost:3000")
     public ResponseEntity<String> deleteLike(@PathVariable int postID, @CookieValue("Authentication") String bearerToken) { // TODO: Refactor with cookie
         Integer userID = authenticateAndReturnID(bearerToken);
         if (userID != null) {
@@ -227,12 +249,14 @@ public class ControllerREST {
     }
 
     @GetMapping("/like/{postID}")
+    @CrossOrigin(allowCredentials = "true", origins = "http://localhost:3000")
     public ResponseEntity<?> getLikesByPostID(@PathVariable int postID) {
         List<Like> likes = likeService.getLikesByPostID(postID);
         return ResponseEntity.ok(likes);
     }
 
     @PutMapping("/comment/{postID}")
+    @CrossOrigin(allowCredentials = "true", origins = "http://localhost:3000")
     public ResponseEntity<String> addComment(@PathVariable int postID, @CookieValue("Authentication") String bearerToken) {
         Integer userID = authenticateAndReturnID(bearerToken);
         if (userID != null) {
@@ -244,6 +268,7 @@ public class ControllerREST {
     }
 
     @DeleteMapping("/comment/{commentID}")
+    @CrossOrigin(allowCredentials = "true", origins = "http://localhost:3000")
     public ResponseEntity<String> deleteComment(@PathVariable int commentID, @CookieValue("Authentication") String bearerToken) {
         Integer userID = authenticateAndReturnID(bearerToken);
         if (userID != null) {

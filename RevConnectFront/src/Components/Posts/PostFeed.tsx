@@ -1,10 +1,17 @@
 import React, { useState } from "react";
 import axios from "axios";
 
+interface comment {
+    commentID: number;
+    author: string;
+    comment: string;
+}
 interface Post {
     postID: number;
-    userID: number;
     post: string;
+    author: string;
+    likes: number;
+    comments: Array<comment>;
 }
 
 function GetPostsForFeed(){
@@ -17,18 +24,25 @@ function GetPostsForFeed(){
         setPost(postList);
     }
 
-    
-    
-
-
-
 return (
     <div>
         <h2>User Posts</h2>
         <ul>
             {posts.map(post => (
                 <li key={post.postID}>
+                    <p>{post.author}</p>
                     <p>{post.post}</p>
+                    <p>{post.likes}</p>
+
+                    <ul>
+                        {post.comments.map(comment => (
+                            <li key={comment.commentID}>
+                                <p>{comment.author}</p>
+                                <p>{comment.comment}</p>
+                            </li>
+                        ))}
+                    </ul>
+
                 </li>
             ))}
         </ul>
