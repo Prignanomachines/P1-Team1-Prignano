@@ -117,9 +117,6 @@ public class ControllerREST {
     @CrossOrigin(allowCredentials = "true", origins = "http://localhost:3000", methods=RequestMethod.PUT)
     public ResponseEntity<String> addLike(@CookieValue("Authentication") String bearerToken, @PathVariable int postID) {
         Integer userID = authenticateAndReturnID(bearerToken);
-
-        System.out.println(userID);
-
         if (userID != null) {
             if (likeService.findByPostIDAndUserID(postID, userID).isEmpty()) {
                 Like like = new Like(postID, userID);
@@ -215,29 +212,49 @@ public class ControllerREST {
         Post updatedPost = postService.updatePost(post);
         return ResponseEntity.ok(updatedPost);
     }
-    @DeleteMapping("/like/{postID}/{userID}")
-    public ResponseEntity<String> deleteLike(@PathVariable int postID, @PathVariable int userID) { // TODO: Refactor with cookie
-        if (!likeService.findByPostIDAndUserID(postID, userID).isEmpty()) {
-            Like like = new Like(postID, userID);
-            likeService.deleteLike(like);
-            return ResponseEntity.status(200).body("Like deleted.");
+    @DeleteMapping("/like/{postID}")
+    public ResponseEntity<String> deleteLike(@PathVariable int postID, @CookieValue("Authentication") String bearerToken) { // TODO: Refactor with cookie
+        Integer userID = authenticateAndReturnID(bearerToken);
+        if (userID != null) {
+            if (!likeService.findByPostIDAndUserID(postID, userID).isEmpty()) {
+                Like like = new Like(postID, userID);
+                likeService.deleteLike(like);
+                return ResponseEntity.status(200).body("Like deleted.");
+            }
+            return ResponseEntity.status(404).body("Like not found.");
         }
-        return ResponseEntity.status(404).body("Like not found.");
+        return ResponseEntity.status(400).body("Not authenticated.");
+    }
+
+    @GetMapping("/like/{postID}")
+    public ResponseEntity<?> getLikesByPostID(@PathVariable int postID) {
+        List<Like> likes = likeService.getLikesByPostID(postID);
+        return ResponseEntity.ok(likes);
     }
 
     @PutMapping("/comment/{postID}")
-    public ResponseEntity<String> addComment(@PathVariable int postID) {
-        Comment comment = new Comment(postID);
-        commentService.addComment(comment);
-        return ResponseEntity.status(200).body("Comment added.");
+    public ResponseEntity<String> addComment(@PathVariable int postID, @CookieValue("Authentication") String bearerToken) {
+        Integer userID = authenticateAndReturnID(bearerToken);
+        if (userID != null) {
+            Comment comment = new Comment(postID, userID);
+            commentService.addComment(comment);
+            return ResponseEntity.status(200).body("Comment added.");
+        }
+        return ResponseEntity.status(400).body("Not authenticated.");
     }
 
-    @DeleteMapping("/comment/{postID}/{commentID}")
-    public ResponseEntity<String> deleteComment(@PathVariable int postID, @PathVariable int commentID) {
-        if (!commentService.getCommentsByPostAndUser(postID, commentID).isEmpty()) {
-            return ResponseEntity.status(200).body("Comment deleted.");
+    @DeleteMapping("/comment/{commentID}")
+    public ResponseEntity<String> deleteComment(@PathVariable int commentID, @CookieValue("Authentication") String bearerToken) {
+        Integer userID = authenticateAndReturnID(bearerToken);
+        if (userID != null) {
+            Comment comment = commentService.findById(commentID);
+            if (comment != null && comment.getAuthorID() == userID) {
+                commentService.deleteComment(comment);
+                return ResponseEntity.status(200).body("Comment deleted.");
+            }
+            return ResponseEntity.status(404).body("Comment not found.");
         }
-        return ResponseEntity.status(404).body("Comment not found.");
+        return ResponseEntity.status(400).body("Not authenticated.");
     }
     //Given a token string, return the authenticated users ID
     private Integer authenticateAndReturnID(String token) {

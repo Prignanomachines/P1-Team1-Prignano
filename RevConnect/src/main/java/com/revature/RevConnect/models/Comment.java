@@ -22,8 +22,21 @@ public class Comment {
     @Column(name="POST_ID")
     int postID;
 
-    public Comment(int postID) {
+    //The ID of the author
+    @Column(name="AUTHOR_ID")
+    int authorID;
+
+    public int getAuthorID() {
+        return authorID;
+    }
+
+    public void setAuthorID(int authorID) {
+        this.authorID = authorID;
+    }
+
+    public Comment(int postID, int authorID) {
         this.postID = postID;
+        this.authorID = authorID;
     }
 
     public Comment() {}

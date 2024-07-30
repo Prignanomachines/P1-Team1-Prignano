@@ -10,5 +10,5 @@ import java.util.List;
 public interface CommentRepository extends JpaRepository<Comment,Integer> {
     List<Comment> findByPostID(int postID);
     List<Comment> findByPostIDAndCommentID(int postID, int commentID);
-
+    Comment findByCommentID(int commentID);
 }
