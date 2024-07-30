@@ -98,6 +98,18 @@ public class ControllerREST {
         else return ResponseEntity.status(409).body("Username not found.");
     }
 
+    @PostMapping("/cookie-auth")
+    @CrossOrigin(allowCredentials = "true", origins = "http://localhost:3000", methods=RequestMethod.POST)
+    public ResponseEntity<User> authUser(@CookieValue("Authentication") String bearerToken) {
+        Integer userID = authenticateAndReturnID(bearerToken);
+        if (userService.getUser(userID) != null) {
+            User result = userService.getUser(userID);
+            return ResponseEntity.status(200).body(result);
+        }
+        else return ResponseEntity.status(409).body(null);
+
+    }
+
     //This is an example of using the auth to grab the userID, You guys can set up the rest of the methods to use auth
     @PutMapping("/like/{postID}")
     @CrossOrigin(allowCredentials = "true", origins = "http://localhost:3000", methods=RequestMethod.PUT)
@@ -117,7 +129,6 @@ public class ControllerREST {
     }
 
     // TODO: Refactor authentication required methods bellow with cookie
-
     @PostMapping("/follow")
     @CrossOrigin(allowCredentials = "true", origins = "http://localhost:3000", methods=RequestMethod.POST)
     public ResponseEntity<String> addFollow(@RequestBody Follow follow) {
