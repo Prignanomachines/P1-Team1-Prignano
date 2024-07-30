@@ -43,6 +43,12 @@ function Nav() {
                         <li className="nav-item">
                             <Link className="nav-link active" aria-current="page" to="/">Home</Link>
                         </li>
+                        <li className="nav-item">
+                            <Link className="nav-link active" aria-current="page" to="/post">Create Post</Link>
+                        </li>
+                        <li className="nav-item">
+                            <Link className="nav-link active" aria-current="page" to="/feed">Feed</Link>
+                        </li>
                         { (userName === "") ? (
                             <li className="nav-item">
                                 <Link className="nav-link" to="/Login">Login</Link>

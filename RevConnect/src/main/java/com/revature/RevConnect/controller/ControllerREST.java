@@ -175,6 +175,7 @@ public class ControllerREST {
 
     //Get the feed of posts
     @GetMapping("/post")
+    @CrossOrigin(allowCredentials = "true", origins = "http://localhost:3000")
     public ResponseEntity<?> getPostsAll(){
         List<Post> posts = postService.getAllPosts();
         return ResponseEntity.ok(posts);
@@ -182,12 +183,17 @@ public class ControllerREST {
 
     //Need to verify that a specific
     @PostMapping("/post")
-    public ResponseEntity<?> createPost(@RequestBody Post post){
-        //Get USERID for post using authenticateAndReturnID();
+    @CrossOrigin(allowCredentials = "true", origins = "http://localhost:3000")
+    public ResponseEntity<?> createPost(@CookieValue ("Authentication") String bearerToken, @RequestBody String post){
+        Integer userID = authenticateAndReturnID(bearerToken);
 
-        //need any flow control?
-        Post newPost = postService.addPost(post);
-        return ResponseEntity.ok(newPost);
+        if (userID != null) {
+            Post p = new Post(post, userID);
+            Post newPost = postService.addPost(p);
+            return ResponseEntity.ok(newPost);
+        }
+        return ResponseEntity.status(400).body("Not authenticated");
+
     }
 
     //authentication wait for userID

@@ -11,6 +11,15 @@ public class Post {
 
     //Post info
 
+
+    public Post() {
+    }
+
+    public Post(String post, int userID) {
+        this.post = post;
+        this.userID = userID;
+    }
+
     //Primary key for identification
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
