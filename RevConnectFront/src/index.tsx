@@ -7,6 +7,8 @@ import Register from './Components/LoginRegister/Register';
 import reportWebVitals from './reportWebVitals';
 import Nav from './Components/Nav';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import CreatePost from './Components/Posts/CreatePost';
+import GetPostsForFeed from './Components/Posts/PostFeed';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -18,6 +20,8 @@ root.render(
             <Route path="/" element={<App />}></Route>
             <Route path='/login' element={<Login />}></Route>
             <Route path='/register' element={<Register />}></Route>
+            <Route path='/post' element={<CreatePost />}></Route>
+            <Route path='/feed' element={<GetPostsForFeed/>}></Route>
         </Routes>
     </BrowserRouter>
 );
