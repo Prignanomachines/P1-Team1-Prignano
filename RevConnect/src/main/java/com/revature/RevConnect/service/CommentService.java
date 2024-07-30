@@ -21,6 +21,10 @@ public class CommentService {
         commentRepository.delete(c);
     }
 
+    public Comment findById(int commentId) {
+        return commentRepository.findByCommentID(commentId);
+    }
+
     //TODO: update
     public void updateComment(Comment c) {
 

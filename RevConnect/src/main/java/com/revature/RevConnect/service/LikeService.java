@@ -21,6 +21,9 @@ public class LikeService {
         likeRepository.delete(l);
     }
 
+    public List<Like> getLikesByPostID(int postID) {
+        return likeRepository.findByPostID(postID);
+    }
 
     public List<Like> findByPostIDAndUserID(int postId, int userId) {
         return likeRepository.findByPostIDAndUserID(postId, userId);
