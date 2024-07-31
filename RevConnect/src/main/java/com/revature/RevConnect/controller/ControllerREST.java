@@ -292,4 +292,43 @@ public class ControllerREST {
         //Authentication failed
         return null;
     }
+
+    @GetMapping("/profile/{userID}")
+    public ResponseEntity<?> getProfile(@PathVariable int userID){
+        User user = userService.getUser(userID);
+        if(user == null){
+            return ResponseEntity.status(400).body("User not found");
+        }
+        return ResponseEntity.ok(user);
+    }
+
+    //Json does not work have to use text format
+    @PatchMapping("/profile/{userID}")
+    @CrossOrigin(allowCredentials = "true", origins =
+            "http://localhost:3000")
+    public ResponseEntity<?> updateBio(@PathVariable Integer userID, @RequestBody String bio,@CookieValue("Authentication") String bearerToken){
+        Integer userIDCheck = authenticateAndReturnID(bearerToken);
+
+        if(userIDCheck == null){
+            return ResponseEntity.status(400).body("User not found or User does not have cookie");
+        }
+
+        userService.updateBio(userID,bio);
+        return ResponseEntity.ok("successfully updated");
+    }
+
+    @GetMapping("/profile/user")
+    @CrossOrigin(allowCredentials = "true", origins =
+            "http://localhost:3000")
+    public ResponseEntity<?> userProfile(@RequestBody String bio,@CookieValue("Authentication") String bearerToken){
+        Integer userIDCheck = authenticateAndReturnID(bearerToken);
+        Integer userCheck = userIDCheck;
+
+        if(!(userCheck >= 1)){
+            return ResponseEntity.status(400).body("User not found or User does not have cookie");
+        }
+
+       User user =  userService.getUser(userIDCheck);
+        return ResponseEntity.ok(user);
+    }
 }

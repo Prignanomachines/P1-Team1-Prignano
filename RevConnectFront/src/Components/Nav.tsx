@@ -46,6 +46,12 @@ function Nav() {
                         <li className="nav-item">
                             <Link className="nav-link active" aria-current="page" to="/feed">Feed</Link>
                         </li>
+                        <li className="nav-item">
+                            <Link className="nav-link active" aria-current="page" to="/profile">Feed</Link>
+                        </li>
+                        <li className="nav-item">
+                            <Link className="nav-link active" aria-current="page" to="/updateprofile">Feed</Link>
+                        </li>
                         { (userName === "") ? (
                             <li className="nav-item">
                                 <Link className="nav-link" to="/Login">Login</Link>

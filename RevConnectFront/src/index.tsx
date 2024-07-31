@@ -22,6 +22,8 @@ root.render(
             <Route path='/register' element={<Register />}></Route>
             <Route path='/post' element={<CreatePost />}></Route>
             <Route path='/feed' element={<GetPostsForFeed/>}></Route>
+            <Route path='/profile' element = {<GetProfile/>}></Route>
+            <Route path='/updateprofile' element = {<UpdateBio/>}></Route>
         </Routes>
     </BrowserRouter>
 );
