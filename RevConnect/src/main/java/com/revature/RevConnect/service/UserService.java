@@ -2,6 +2,7 @@ package com.revature.RevConnect.service;
 
 import com.revature.RevConnect.models.User;
 import com.revature.RevConnect.repositories.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,4 +35,8 @@ public class UserService {
         return userRepository.findByUsername(username);
     }
 
+    @Transactional
+    public void updateBio(Integer userID,String bio){
+        userRepository.updateBio(userID,bio);
+    }
 }
