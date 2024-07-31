@@ -90,8 +90,8 @@ async function regRequest() {
     let passwordForm: HTMLInputElement = document.getElementById('passwordForm') as HTMLInputElement;
 
     let postData = {
-        firstName: firstNameForm.value,
-        lastName: lastNameForm.value,
+        firstname: firstNameForm.value,
+        lastname: lastNameForm.value,
         username: usernameForm.value,
         password: passwordForm.value
     }

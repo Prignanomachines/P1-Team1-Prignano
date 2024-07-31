@@ -53,8 +53,10 @@ function ViewProfile(){
                 "Content-Type":"application/json"
             }
             let request = {method:"GET",
-            headers:headers
+            headers:headers,
+            withCredentials: true
         }
+        try{
             let response = await axios.get(url,request);
             let responseBody = await response.data;
             
@@ -63,6 +65,11 @@ function ViewProfile(){
            console.log(responseBody);
         
      console.log(profile)
+        }
+            
+    catch(error:any){
+        console.log(error.message)
+    }
    
     }
 

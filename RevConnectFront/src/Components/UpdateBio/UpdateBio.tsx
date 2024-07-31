@@ -23,39 +23,35 @@ function UpdateBio(){
     let [newBio, setBio] = useState({bio:""});
 
 function changeBio(){
-    /*
- console.log(bioForm.value)
- newBio.bio = bioForm.value
- console.log(newBio.bio)
-*/
-
 update()
+alert("Updated Bio")
  }
 
 return(
    <>
 
     
-     <p><input id="userIDForm" className="form-control" />
-    <button onClick={changeBio}>Submit</button></p>
-    Bio: <input id="bioForm" className="form-control" />
+      
+    <input id="bioForm" className="form-control" />
+    <button onClick={changeBio}>Submit</button>
    </>
 )
 
 }
 async function update(){
     let bioForm: HTMLInputElement = document.getElementById('bioForm') as HTMLInputElement;
-    let userIDForm: HTMLInputElement = document.getElementById('userIDForm') as HTMLInputElement;
+  
 
-    let url = 'http://localhost:8080/profile/'+ userIDForm.value
+    let url = 'http://localhost:8080/profile'
 
     let headers = {
         "Content-Type":"application/json"
     }
-    let request = {method:"PATCH",
+    let request = {method:"patch",
     //body: JSON.stringify(),
     headers: headers,
-   data: bioForm.value
+   data: bioForm.value,
+   withCredentials:true
     }
     try{
         let  response = await axios(url,request);
