@@ -56,12 +56,18 @@ function GetProfile(){
             let request = {method:"GET",
             headers:headers
         }
+        try{
             let response = await axios.get(url,request);
             let responseBody = await response.data;
             
            setProfile(responseBody)
            console.log(userIDForm.value)
            console.log(responseBody);
+        }
+        catch(error:any){
+            console.log(error.message)
+        }
+           
         
      console.log(profile)
    

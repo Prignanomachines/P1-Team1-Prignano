@@ -9,6 +9,9 @@ import Nav from './Components/Nav';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import CreatePost from './Components/Posts/CreatePost';
 import GetPostsForFeed from './Components/Posts/PostFeed';
+import GetProfile from './Components/Getprofile/GetProfile';
+import UpdateBio from './Components/UpdateBio/UpdateBio';
+import ViewProfile from './Components/ViewProfile/ViewProfile';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -24,6 +27,7 @@ root.render(
             <Route path='/feed' element={<GetPostsForFeed/>}></Route>
             <Route path='/profile' element = {<GetProfile/>}></Route>
             <Route path='/updateprofile' element = {<UpdateBio/>}></Route>
+            <Route path='/viewprofile' element = {<ViewProfile/>}></Route>
         </Routes>
     </BrowserRouter>
 );

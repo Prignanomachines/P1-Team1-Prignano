@@ -276,19 +276,19 @@ public class ControllerREST {
     //Given a token string, return the authenticated users ID
     private Integer authenticateAndReturnID(String token) {
         //Get token
-        int userID = tokenService.returnAuthID(token);
+        Integer userID = tokenService.returnAuthID(token);
+        if(userID != null) {
+            System.out.println(userID);
 
-        System.out.println(userID);
+            //Using the ID, get the user associated with it
+            User u = userService.getUser(userID);
 
-        //Using the ID, get the user associated with it
-        User u = userService.getUser(userID);
-
-        //Authenticate
-        if (tokenService.validateAuthentication(token, u.getUsername())) {
-            //return token
-            return userID;
+            //Authenticate
+            if (tokenService.validateAuthentication(token, u.getUsername())) {
+                //return token
+                return userID;
+            }
         }
-
         //Authentication failed
         return null;
     }
@@ -303,32 +303,33 @@ public class ControllerREST {
     }
 
     //Json does not work have to use text format
-    @PatchMapping("/profile/{userID}")
+    @PatchMapping("/profile")
     @CrossOrigin(allowCredentials = "true", origins =
-            "http://localhost:3000")
-    public ResponseEntity<?> updateBio(@PathVariable Integer userID, @RequestBody String bio,@CookieValue("Authentication") String bearerToken){
+            "http://localhost:3000", methods = RequestMethod.PATCH)
+    public ResponseEntity<?> updateBio(@RequestBody String bio,@CookieValue("Authentication") String bearerToken){
         Integer userIDCheck = authenticateAndReturnID(bearerToken);
 
         if(userIDCheck == null){
             return ResponseEntity.status(400).body("User not found or User does not have cookie");
         }
 
-        userService.updateBio(userID,bio);
+        userService.updateBio(userIDCheck,bio);
         return ResponseEntity.ok("successfully updated");
     }
 
     @GetMapping("/profile/user")
     @CrossOrigin(allowCredentials = "true", origins =
             "http://localhost:3000")
-    public ResponseEntity<?> userProfile(@RequestBody String bio,@CookieValue("Authentication") String bearerToken){
+    public ResponseEntity<?> userProfile(@CookieValue("Authentication") String bearerToken){
         Integer userIDCheck = authenticateAndReturnID(bearerToken);
-        Integer userCheck = userIDCheck;
 
-        if(!(userCheck >= 1)){
+
+        if((userIDCheck == null)){
             return ResponseEntity.status(400).body("User not found or User does not have cookie");
         }
 
        User user =  userService.getUser(userIDCheck);
+
         return ResponseEntity.ok(user);
     }
 }
