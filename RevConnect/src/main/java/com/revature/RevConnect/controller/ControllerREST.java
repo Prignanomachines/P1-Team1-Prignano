@@ -168,10 +168,28 @@ public class ControllerREST {
 
     //This is Zachs code: TODO use Auth cookie to get userID serverside.
     //Getting all of the posts associated by UserID
-    @GetMapping("/post/{userID}")
-    public ResponseEntity<?> getPostsByUser(@PathVariable int userID){
-        List<Post> posts = postService.getPostsByAuthor(userID);
-        return ResponseEntity.ok(posts);
+    @GetMapping("/post/{username}")
+    @CrossOrigin(allowCredentials = "true", origins = "http://localhost:3000")
+    public ResponseEntity<?> getPostsByUser(@PathVariable String username){
+        User u = userService.getUser(username);
+        List<Post> posts = postService.getPostsByAuthor(u.getUserID());
+        List<PostDTO> toReturn = new ArrayList<>();
+        for (int i = 0; i < posts.size(); i++) {
+            String author = userService.getUser(posts.get(i).getUserID()).getUsername();
+            List<Like> likes = likeService.getLikesByPostID(posts.get(i).getPostID());
+            List<Comment> comments = commentService.getCommentsByPost(posts.get(i).getPostID());
+            List<CommentDTO> commentDTOS = new ArrayList<>();
+
+            for (int j = 0; j < comments.size(); j++) {
+                String a = userService.getUser(comments.get(i).getAuthorID()).getUsername();
+                commentDTOS.add(new CommentDTO(comments.get(j).getCommentID(), comments.get(j).getComment(), a));
+            }
+
+            PostDTO d = new PostDTO(posts.get(i).getPostID(), posts.get(i).getPost(), author, likes.size(), commentDTOS);
+
+            toReturn.add(d);
+        }
+        return ResponseEntity.ok(toReturn);
     }
 
     //Get the feed of posts
