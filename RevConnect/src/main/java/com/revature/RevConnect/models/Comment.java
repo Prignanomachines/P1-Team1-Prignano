@@ -34,9 +34,10 @@ public class Comment {
         this.authorID = authorID;
     }
 
-    public Comment(int postID, int authorID) {
+    public Comment(int postID, int authorID, String comment) {
         this.postID = postID;
         this.authorID = authorID;
+        this.comment = comment;
     }
 
     public Comment() {}

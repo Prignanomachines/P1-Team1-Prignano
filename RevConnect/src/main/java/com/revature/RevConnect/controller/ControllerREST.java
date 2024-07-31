@@ -119,6 +119,7 @@ public class ControllerREST {
     @PutMapping("/like/{postID}")
     @CrossOrigin(allowCredentials = "true", origins = "http://localhost:3000", methods=RequestMethod.PUT)
     public ResponseEntity<String> addLike(@CookieValue("Authentication") String bearerToken, @PathVariable int postID) {
+        System.out.println("Post ID = " + postID);
         Integer userID = authenticateAndReturnID(bearerToken);
         if (userID != null) {
             if (likeService.findByPostIDAndUserID(postID, userID).isEmpty()) {
@@ -126,8 +127,13 @@ public class ControllerREST {
                 likeService.addLike(like);
                 return ResponseEntity.status(200).body("Like added.");
             }
+            else {
+                Like like = likeService.findByPostIDAndUserID(postID, userID).get(0);
+                likeService.deleteLike(like);
+                return ResponseEntity.status(200).body("Like deleted.");
+            }
         }
-        return ResponseEntity.status(400).body("You have already liked this post.");
+        return ResponseEntity.status(400).body("Not authenticated.");
     }
 
     // TODO: Refactor authentication required methods bellow with cookie
@@ -187,7 +193,7 @@ public class ControllerREST {
             List<CommentDTO> commentDTOS = new ArrayList<>();
 
             for (int j = 0; j < comments.size(); j++) {
-                String a = userService.getUser(comments.get(i).getAuthorID()).getUsername();
+                String a = userService.getUser(comments.get(j).getAuthorID()).getUsername();
                 commentDTOS.add(new CommentDTO(comments.get(j).getCommentID(), comments.get(j).getComment(), a));
             }
 
@@ -233,20 +239,6 @@ public class ControllerREST {
         Post updatedPost = postService.updatePost(post);
         return ResponseEntity.ok(updatedPost);
     }
-    @DeleteMapping("/like/{postID}")
-    @CrossOrigin(allowCredentials = "true", origins = "http://localhost:3000")
-    public ResponseEntity<String> deleteLike(@PathVariable int postID, @CookieValue("Authentication") String bearerToken) { // TODO: Refactor with cookie
-        Integer userID = authenticateAndReturnID(bearerToken);
-        if (userID != null) {
-            if (!likeService.findByPostIDAndUserID(postID, userID).isEmpty()) {
-                Like like = new Like(postID, userID);
-                likeService.deleteLike(like);
-                return ResponseEntity.status(200).body("Like deleted.");
-            }
-            return ResponseEntity.status(404).body("Like not found.");
-        }
-        return ResponseEntity.status(400).body("Not authenticated.");
-    }
 
     @GetMapping("/like/{postID}")
     @CrossOrigin(allowCredentials = "true", origins = "http://localhost:3000")
@@ -257,10 +249,10 @@ public class ControllerREST {
 
     @PutMapping("/comment/{postID}")
     @CrossOrigin(allowCredentials = "true", origins = "http://localhost:3000")
-    public ResponseEntity<String> addComment(@PathVariable int postID, @CookieValue("Authentication") String bearerToken) {
+    public ResponseEntity<String> addComment(@PathVariable int postID, @CookieValue("Authentication") String bearerToken, @RequestBody String content) {
         Integer userID = authenticateAndReturnID(bearerToken);
         if (userID != null) {
-            Comment comment = new Comment(postID, userID);
+            Comment comment = new Comment(postID, userID, content);
             commentService.addComment(comment);
             return ResponseEntity.status(200).body("Comment added.");
         }

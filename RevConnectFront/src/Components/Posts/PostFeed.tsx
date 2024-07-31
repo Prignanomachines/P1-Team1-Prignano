@@ -30,11 +30,13 @@ function GetPostsForFeed(){
     }
 
     async function addLike(postID: number) {
-
+        await modifyLike(postID);
+        feedRefresh();
     }
 
     async function addComment(postID: number) {
-
+        await postComment(postID)
+        feedRefresh();
     }
 
 return (
@@ -56,8 +58,17 @@ return (
                                         <p> - "{post.post}" <i className="em em-anguished"></i> <i className="em em-anguished"></i> <i className="em em-anguished"></i></p>
                                     </div>
                                     <div className="reaction">
-                                        <button onClick={() => addLike(post.postID)}> <img width="25" height="25" src={likeButton} alt="LIKE" /> </button> <button onClick={() => addComment(post.postID)}> <img width="25" height="25" src={commentButton} alt="LIKE" /> </button> <input id="commentForm" />
+                                        <button onClick={() => addLike(post.postID)}> <img width="25" height="25" src={likeButton} alt="LIKE" /> </button> <button onClick={() => addComment(post.postID)}> <img width="25" height="25" src={commentButton} alt="LIKE" /> </button>
+                                        <input id={post.postID.toString()} />
                                         <p>{ post.likes } likes</p>
+                                    </div>
+                                    <div>
+                                        {post.comments.map(comment => (
+                                            <div>
+                                                {comment.author}: {" "}
+                                                {comment.comment}
+                                            </div>
+                                        ))}
                                     </div>
                                 </div>
                             </div>
@@ -96,5 +107,49 @@ async function getPosts(): Promise<Array<Post>>{
     }
     return [];
 };
+
+async function modifyLike(id: number) {
+    const url = "http://localhost:8080/like/" + id;
+    try {
+        const response = await axios(url, {
+            method: 'put',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            withCredentials: true
+        });
+
+        if (!(response.status === 200)) {
+            throw new Error(`Response status: ${response.status}`);
+        }
+
+    } catch (error: any) {
+        console.error(error.message);
+    }
+}
+
+async function postComment(id: number) {
+    const url = "http://localhost:8080/comment/" + id;
+
+    let commentForm: HTMLInputElement = document.getElementById(id.toString()) as HTMLInputElement;
+
+    try {
+        const response = await axios(url, {
+            method: 'put',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            withCredentials: true,
+            data: commentForm.value
+        });
+
+        if (!(response.status === 200)) {
+            throw new Error(`Response status: ${response.status}`);
+        }
+
+    } catch (error: any) {
+        console.error(error.message);
+    }
+}
 
 export default GetPostsForFeed;
