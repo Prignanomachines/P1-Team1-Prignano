@@ -1,0 +1,38 @@
+body {
+    margin-top: 20px;
+}
+
+/*==================================================
+  Post Contents CSS
+  ==================================================*/
+
+.post-content {
+    background: #f8f8f8;
+
+}
+
+img.profile-photo-md {
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+}
+
+img.profile-photo-sm {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+}
+
+.text-green {
+    color: #8dc63f;
+}
+
+.text-red {
+    color: #ef4136;
+}
+
+.following {
+    color: #8dc63f;
+    font-size: 12px;
+    margin-left: 20px;
+}

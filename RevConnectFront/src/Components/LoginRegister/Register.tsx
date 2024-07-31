@@ -3,7 +3,7 @@ import axios from "axios";
 import { useState } from 'react'
 import logo from '../../logo.png';
 import { user } from '../User';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.css';
 
 
@@ -19,11 +19,17 @@ function Register() {
         updateUser();
     }
 
+    const navigate = useNavigate();
     function updateUser() {
         setUser(user.userName);
         setFirst(user.firstName);
         setLast(user.lastName);
         setBio(user.bio);
+
+        if (user.userName !== "") {
+            navigate("/");
+        }
+
     }
 
     return (
