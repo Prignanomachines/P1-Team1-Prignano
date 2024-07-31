@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { json } from "stream/consumers";
+import UpdateBio from "./UpdateBio";
 
 class user{
     username:string
@@ -52,42 +53,40 @@ function ViewProfile(){
             let headers = {
                 "Content-Type":"application/json"
             }
-            let request = {method:"GET",
+            let request = {
+            method:"GET",
             headers:headers,
             withCredentials: true
-        }
+        };
         try{
             let response = await axios.get(url,request);
             let responseBody = await response.data;
             
-           setProfile(responseBody)
+            setProfile(responseBody)
        
-           console.log(responseBody);
+            console.log(responseBody);
         
-     console.log(profile)
+            console.log(profile)
+        } catch(error:any){
+            console.log(error.message)
         }
-            
-    catch(error:any){
-        console.log(error.message)
-    }
-   
     }
 
-userp = profile
+    userp = profile
     
-   return(<div>
-    
+   return (
 
-  <button onClick={vProfile}>ViewProfile</button>  
-    <>
-     <p> Username: {profile.username}</p>
-     <p>First name: {profile.firstname}</p>
-     <p>Last Name: {profile.lastname}</p>
-     Bio: {profile.bio}
-     </>
+        <div className="profile-container">
+            <div className="profile-section">
+                <button onClick={vProfile}>ViewProfile</button>  
+                <p> Username: {profile.username}</p>
+                <p>First name: {profile.firstname}</p>
+                <p>Last Name: {profile.lastname}</p>
+                <p>Bio: {profile.bio}</p>
+            </div>
      </div>
-  
+        
    )
 }
 
-export default ViewProfile
+export default ViewProfile;
