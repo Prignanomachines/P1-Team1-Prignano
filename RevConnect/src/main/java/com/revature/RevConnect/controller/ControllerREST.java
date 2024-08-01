@@ -306,6 +306,7 @@ public class ControllerREST {
 
             //Using the ID, get the user associated with it
             User u = userService.getUser(userID);
+            if (u == null) return null;
 
             //Authenticate
             if (tokenService.validateAuthentication(token, u.getUsername())) {
