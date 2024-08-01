@@ -16,7 +16,7 @@ interface Post {
     comments: Array<comment>;
 }
 
-function GetPostsForUserID(poster: string){
+function GetPostsForUserID({poster}: any){
 
     const [posts, setPost] = useState(Array<Post>);
 
@@ -26,13 +26,14 @@ function GetPostsForUserID(poster: string){
         setPost(postList);
     }
 
-    async function addLike(postID: number) {
+    async function addLike(postID: number){
 
     }
 
     async function addComment(postID: number) {
 
     }
+
 
     return (
         <div>
@@ -76,7 +77,6 @@ function GetPostsForUserID(poster: string){
 }
 
 async function getPosts(poster: string): Promise<Post[]> {
-    //Probably change uri + in backend
 
     const url = "http://localhost:8080/post/" + poster;
     try {
