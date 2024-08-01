@@ -20,6 +20,7 @@ public class Post {
         this.userID = userID;
     }
 
+
     //Primary key for identification
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

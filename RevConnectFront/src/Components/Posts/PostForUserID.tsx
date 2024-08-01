@@ -19,6 +19,7 @@ interface Post {
 function GetPostsForUserID({poster}: any){
 
     const [posts, setPost] = useState(Array<Post>);
+    const [updatedContent, setUpdatedContent] = useState<{[key: number]: string}>({});
 
     
     async function feedRefresh(){
@@ -32,6 +33,50 @@ function GetPostsForUserID({poster}: any){
 
     async function addComment(postID: number) {
 
+    }
+
+    async function handleDelete(postID: number){
+        await deletePost(postID);
+        feedRefresh();
+    }
+
+    async function updatePost(postID: number) {
+        const url = `http://localhost:8080/post/` + postID;
+    
+        try{
+            const response = await axios.patch(url, {
+                post: updatedContent[postID]
+            },{ 
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                withCredentials: true,
+                
+            });
+            if(response.status !== 200){
+                throw new Error(`Response status: ${response.status}`);
+            }
+            alert("post updated");
+            setUpdatedContent(prevState => ({
+                ...prevState,
+                [postID]: ""
+            }));
+            feedRefresh();
+        }catch(error: any){
+            console.error(error.message);
+        } 
+    }
+
+    function handleInputChange(postID: number, value: string){
+        setUpdatedContent(prevState => ({
+            ...prevState,
+            [postID]: value
+        }));
+    }
+
+    function handleSubmit(event: any, postID: number){
+        event.preventDefault();
+        updatePost(postID);
     }
 
 
@@ -62,6 +107,21 @@ function GetPostsForUserID({poster}: any){
                                         </button>
                                         <input id="commentForm" />
                                         <p>{post.likes} likes</p>
+                                    </div>
+                                    <div>
+                                        <button onClick={() => handleDelete(post.postID)}>
+                                            Deleted
+                                        </button>
+                                    </div>
+                                    <div>
+                                        <form onSubmit={(e) => handleSubmit(e, post.postID)}>
+                                            <input type='text'
+                                                placeholder="Update Post Content"
+                                                value={updatedContent[post.postID] || ''}
+                                                onChange={(e) => handleInputChange(post.postID, e.target.value)}
+                                            />
+                                            <button type='submit'>Update</button>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
@@ -98,5 +158,26 @@ async function getPosts(poster: string): Promise<Post[]> {
     }
     return [];
 };
+
+async function deletePost(postID: number){
+    const url = 'http://localhost:8080/post/' + postID;
+
+    try{
+        const response = await axios.delete(url, {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            withCredentials: true
+        });
+        if(response.status !== 200){
+            throw new Error(`Response status: ${response.status}`);
+        }
+        alert("Deleted successfully!");
+    }catch(error: any){
+        console.error(error.message);
+    }
+}
+
+
 
 export default GetPostsForUserID;

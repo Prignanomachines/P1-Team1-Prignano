@@ -250,12 +250,18 @@ public class ControllerREST {
         return ResponseEntity.ok("Post deleted");
     }
 
-    @PatchMapping("/post")
-    @CrossOrigin(allowCredentials = "true", origins = "http://localhost:3000")
-    public ResponseEntity<?> updatePost(@RequestBody Post post){
-        //Get USERID for post using authenticateAndReturnID();
-        Post updatedPost = postService.updatePost(post);
-        return ResponseEntity.ok(updatedPost);
+    @PatchMapping("/post/{postID}")
+    @CrossOrigin(allowCredentials = "true", origins = "http://localhost:3000", methods = RequestMethod.PATCH)
+    public ResponseEntity<?> updatePost( @CookieValue("Authentication") String bearerToken, @PathVariable int postID, @RequestBody Post post){
+        Integer userIDCheck = authenticateAndReturnID(bearerToken);
+
+        if(userIDCheck != null){
+            Post updatedPost = postService.updatePost(postID, post.getPost());
+            return ResponseEntity.ok(updatedPost);
+        }
+        return ResponseEntity.status(400).body("Here");
+
+
     }
 
     @GetMapping("/like/{postID}")

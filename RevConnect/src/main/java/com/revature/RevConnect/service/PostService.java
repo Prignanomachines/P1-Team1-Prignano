@@ -28,11 +28,11 @@ public class PostService {
         postRepository.delete(post);
     }
 
-    //TODO: update
-    public Post updatePost(Post post) {
-        Post existingPost = postRepository.findByPostID(post.getPostID());
+    //huh
+    public Post updatePost(int postID, String post) {
+        Post existingPost = postRepository.findByPostID(postID);
         if(existingPost != null){
-            existingPost.setPost(post.getPost());
+            existingPost.setPost(post);
             return postRepository.save(existingPost);
         }else{
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Message is either blank, or cannot be found");
