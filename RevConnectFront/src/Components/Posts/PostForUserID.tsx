@@ -1,5 +1,6 @@
 import React, {useState} from "react";
 import axios from "axios";
+import './PostForUserID.css';
 import likeButton from './likeButton.png';
 import commentButton from './commentButton.png';
 
@@ -86,7 +87,7 @@ function GetPostsForUserID({poster}: any){
                 <h2>User's Posts</h2>
             </div>
             {posts.map(post => (
-                <div className="container" key={post.postID}>
+                <div className="container post-container" key={post.postID}>
                     <div className="row">
                         <div className="">
                             <div className="post-content">
@@ -99,28 +100,28 @@ function GetPostsForUserID({poster}: any){
                                         <p> - "{post.post}" <i className="em em-anguished"></i> <i className="em em-anguished"></i> <i className="em em-anguished"></i></p>
                                     </div>
                                     <div className="reaction">
-                                        <button onClick={() => addLike(post.postID)}>
+                                        <button className="reaction-button" onClick={() => addLike(post.postID)}>
                                             <img width="25" height="25" src={likeButton} alt="LIKE" />
                                         </button>
-                                        <button onClick={() => addComment(post.postID)}>
+                                        <button className="reaction-button" onClick={() => addComment(post.postID)}>
                                             <img width="25" height="25" src={commentButton} alt="COMMENT" />
                                         </button>
-                                        <input id="commentForm" />
+                                        <input className="comment-input" id="commentForm" />
                                         <p>{post.likes} likes</p>
                                     </div>
                                     <div>
-                                        <button onClick={() => handleDelete(post.postID)}>
+                                        <button className="delete-button" onClick={() => handleDelete(post.postID)}>
                                             Deleted
                                         </button>
                                     </div>
                                     <div>
-                                        <form onSubmit={(e) => handleSubmit(e, post.postID)}>
+                                        <form className="update-form" onSubmit={(e) => handleSubmit(e, post.postID)}>
                                             <input type='text'
                                                 placeholder="Update Post Content"
                                                 value={updatedContent[post.postID] || ''}
                                                 onChange={(e) => handleInputChange(post.postID, e.target.value)}
                                             />
-                                            <button type='submit'>Update</button>
+                                            <button className="update button" type='submit'>Update</button>
                                         </form>
                                     </div>
                                 </div>
@@ -130,7 +131,7 @@ function GetPostsForUserID({poster}: any){
                 </div>
             ))}
             <div className="App">
-                <button onClick={feedRefresh}>Refresh Feed</button>
+                <button className="refresh-button" onClick={feedRefresh}>Refresh Feed</button>
             </div>
         </div>
     );

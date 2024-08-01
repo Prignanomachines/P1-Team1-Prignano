@@ -58,7 +58,7 @@ function UpdateBio(){
 
     return (
         <> 
-         <input id="bioForm" className="form-control" />
+         <input id="bioForm" className="form-control" placeholder="Update your bio!"/>
          <button onClick={changeBio}>Submit</button>
         </>
     )

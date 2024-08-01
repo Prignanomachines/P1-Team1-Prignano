@@ -3,6 +3,7 @@ import UpdateBio from "../ProfileComponents/UpdateBio";
 import ViewProfile from "../ProfileComponents/ViewProfile";
 import GetPostsForUserID from "../Posts/PostForUserID";
 import { user } from "../User";
+import "./ProfilePage.css";
 
 function ProfilePage(){
 
@@ -15,7 +16,7 @@ function ProfilePage(){
             <div className="profile-section">
                 <UpdateBio />
             </div>
-            <div>
+            <div className="profile-section">
                 <GetPostsForUserID poster={user.userName}/>
             </div>
         </div>

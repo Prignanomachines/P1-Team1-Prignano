@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { TwitterShareButton, TwitterIcon } from "react-share";
 import likeButton from './likeButton.png';
 import commentButton from './commentButton.png';
 import './PostFeed.css';
@@ -40,47 +41,54 @@ function GetPostsForFeed(){
     }
 
 return (
-    <div>
-        <div className="App">
-            <h2>User Posts</h2>
-        </div>
+    <div className="post-feed-container">
+            <div className="App">
+                <h2>User Posts</h2>
+            </div>
             {posts.map(post => (
-                <div className="container">
-                    <div className="row">
-                        <div className="">
-                            <div className="post-content">
-                                <div className="post-detail">
-                                    <div className="user-info">
-                                        <h5>{ post.author }</h5>
+                <div className="post-container" key={post.postID}>
+                    <div className="post-content">
+                        <div className="post-detail">
+                            <div className="user-info">
+                                <h5>{post.author}</h5>
+                            </div>
+                            <div className="line-divider"></div>
+                            <div className="post-text">
+                                <p> - "{post.post}" <i className="em em-anguished"></i> <i className="em em-anguished"></i> <i className="em em-anguished"></i></p>
+                            </div>
+                            <div className="reaction">
+                                <button className="reaction-button" onClick={() => addLike(post.postID)}>
+                                    <img width="25" height="25" src={likeButton} alt="LIKE" />
+                                </button>
+                                <button className="reaction-button" onClick={() => addComment(post.postID)}>
+                                    <img width="25" height="25" src={commentButton} alt="COMMENT" />
+                                </button>
+                                <input className="comment-input" id={post.postID.toString()} />
+                                <p>{post.likes} likes</p>
+                            </div>
+                            <div className="comments-section">
+                                {post.comments.map(comment => (
+                                    <div key={comment.commentID} className="comment">
+                                        <strong>{comment.author}</strong>: {comment.comment}
                                     </div>
-                                    <div className="line-divider"></div>
-                                    <div className="post-text">
-                                        <p> - "{post.post}" <i className="em em-anguished"></i> <i className="em em-anguished"></i> <i className="em em-anguished"></i></p>
-                                    </div>
-                                    <div className="reaction">
-                                        <button onClick={() => addLike(post.postID)}> <img width="25" height="25" src={likeButton} alt="LIKE" /> </button> <button onClick={() => addComment(post.postID)}> <img width="25" height="25" src={commentButton} alt="LIKE" /> </button>
-                                        <input id={post.postID.toString()} />
-                                        <p>{ post.likes } likes</p>
-                                    </div>
-                                    <div>
-                                        {post.comments.map(comment => (
-                                            <div>
-                                                {comment.author}: {" "}
-                                                {comment.comment}
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
+                                ))}
+                            </div>
+                            <div className="share-button">
+                                <TwitterShareButton
+                                    url={`https://localhost:8080/post/${post.postID}`}
+                                    title={post.post}
+                                >
+                                    <TwitterIcon size={32} round={true} />
+                                </TwitterShareButton>
                             </div>
                         </div>
                     </div>
                 </div>
-                    ))
-        }
-        <div className="App">
-            <button onClick={feedRefresh}>Refresh Feed</button>
+            ))}
+            <div className="App">
+                <button className="refresh-button" onClick={feedRefresh}>Refresh Feed</button>
+            </div>
         </div>
-    </div>
 );
 }
 

@@ -1,22 +1,23 @@
-.post-feed-container {
-    padding: 20px;
-    background-color: #f5f5f5;
-  }
-  
-  .App {
+.App {
     text-align: center;
     font-family: 'Arial, sans-serif';
     color: #333;
     padding: 20px;
+    background-color: #f9f9f9;
   }
   
-  .post-container {
+  .container {
     width: 80%;
     margin: 20px auto;
     padding: 20px;
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .row {
+    display: flex;
+    flex-direction: column;
   }
   
   .post-content {
@@ -62,19 +63,28 @@
     border-radius: 4px;
   }
   
-  .comments-section {
-    margin-top: 10px;
-  }
-  
-  .comment {
-    padding: 8px;
-    background-color: #f1f1f1;
+  .delete-button {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 10px 20px;
     border-radius: 4px;
-    margin-bottom: 5px;
+    cursor: pointer;
   }
   
-  .share-button {
+  .update-form {
+    display: flex;
+    gap: 10px;
     margin-top: 10px;
+  }
+  
+  .update-button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
   }
   
   .refresh-button {
