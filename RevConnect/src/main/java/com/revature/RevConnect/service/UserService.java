@@ -13,10 +13,14 @@ public class UserService {
     private UserRepository userRepository;
 
     public User addUser(User u) {
+
+        u.setPassword(PasswordEncrypt.encrypt(u.getPassword()));
+
         return userRepository.save(u);
     }
 
     public void deleteUser(User u) {
+
         userRepository.delete(u);
     }
 

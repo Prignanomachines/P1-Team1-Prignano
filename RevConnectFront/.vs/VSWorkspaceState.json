@@ -4,9 +4,12 @@
     "\\public",
     "\\src",
     "\\src\\Components",
+    "\\src\\Components\\Getprofile",
     "\\src\\Components\\LoginRegister",
-    "\\src\\Components\\Posts"
+    "\\src\\Components\\Posts",
+    "\\src\\Components\\UpdateBio",
+    "\\src\\Components\\ViewProfile"
   ],
-  "SelectedNode": "\\src\\Components\\Posts\\PostFeed.tsx",
+  "SelectedNode": "\\src\\index.tsx",
   "PreviewInSolutionExplorer": false
 }

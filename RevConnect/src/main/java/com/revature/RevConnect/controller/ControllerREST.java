@@ -82,7 +82,7 @@ public class ControllerREST {
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         if (userService.getUser(user.getUsername()) != null) {
             User result = userService.getUser(user.getUsername());
-            if (result.getPassword().equals(user.getPassword())) {
+            if (PasswordEncrypt.passwordMatch(user.getPassword(), result.getPassword())) {
 
                 Map<String, String> claimsMap = new HashMap<>();
                 claimsMap.put("username", result.getUsername());
