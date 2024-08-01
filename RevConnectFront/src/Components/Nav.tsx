@@ -34,7 +34,36 @@ function Nav() {
     <div className="Nav">
         <nav className="navbar navbar-expand-lg bg-body-tertiary">
             <div className="container-fluid">
-                <Link className="navbar-brand" to="#">Navbar</Link>
+                <Link className="navbar-brand" to="#">RevConnect</Link>
+                <ul className="navbar-nav">
+                { (userName === "") ? (
+                            <li className="nav-item">
+                                <Link className="nav-link" to="/Login">Login</Link>
+                            </li>
+                            ) : (
+                                <>
+                                <li className="nav-item">
+                                        <Link className="nav-link active" aria-current="page" to="/post">Create Post</Link>
+                                </li>
+                                <li className="nav-item">
+                                        <Link className="nav-link active" aria-current="page" to="/feed">Feed</Link>
+                                </li>
+                                <li className="nav-item">
+                                        <Link className="nav-link active" aria-current="page" to="/profile">Profile</Link>
+                                </li> 
+                                </>     
+                            )}
+                </ul>
+            </div>
+        </nav>
+    </div>
+    )
+
+}
+
+export default Nav;
+
+{/*}
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span className="navbar-toggler-icon"></span>
                 </button>
@@ -53,26 +82,11 @@ function Nav() {
                             <Link className="nav-link active" aria-current="page" to="/updateprofile">Update Bio</Link>
                         </li>
                         <li className='nav-item'>
-                            <Link className="nav-link active" aria-current="page" to="/viewprofile">View Porfile</Link>
+                            <Link className="nav-link active" aria-current="page" to="/viewprofile">View Profile</Link>
                         </li>
+                        
 
-                        { (userName === "") ? (
-                            <li className="nav-item">
-                                <Link className="nav-link" to="/Login">Login</Link>
-                            </li>
-                            ) : (
-                                    <li className="nav-item">
-                                        <Link className="nav-link active" aria-current="page" to="/post">Create Post</Link>
-                                    </li>
-                            )
-                        }
+                        
+                            
                     </ul>
-                </div>
-            </div>
-        </nav>
-        </div>
-    )
-
-}
-
-export default Nav;
+                </div>*/}
