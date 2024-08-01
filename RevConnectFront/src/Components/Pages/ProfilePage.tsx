@@ -1,8 +1,11 @@
 import React from "react";
 import UpdateBio from "../ProfileComponents/UpdateBio";
 import ViewProfile from "../ProfileComponents/ViewProfile";
+import GetPostsForUserID from "../Posts/PostForUserID";
+import { user } from "../User";
 
 function ProfilePage(){
+
     return (
         <div className="profile-container">
             <h1>Profile Page</h1>
@@ -11,6 +14,9 @@ function ProfilePage(){
             </div>
             <div className="profile-section">
                 <UpdateBio />
+            </div>
+            <div>
+                <GetPostsForUserID poster={user.userName}/>
             </div>
         </div>
     );
