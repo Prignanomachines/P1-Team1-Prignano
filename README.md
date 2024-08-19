@@ -1,8 +1,8 @@
 # RevConnect Full-Stack Application br /
-By Dominic Prignano br /
+By Dominic Prignano < br / >
 
-Co-created with: br /
-• Alden Jack Dus
+Co-created with: < br / >
+• Alden Jack Dus < br / >
 • Braxton Kennedy
 • Sarina Wu
 • Zachary Christopher Kocienda
