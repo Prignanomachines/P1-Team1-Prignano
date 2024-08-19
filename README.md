@@ -1,4 +1,4 @@
-# RevConnect Full-Stack Application br /
+# RevConnect Full-Stack Application
 By Dominic Prignano <br />
 
 Co-created with: <br />
@@ -7,7 +7,7 @@ Co-created with: <br />
 • Sarina Wu <br />
 • Zachary Christopher Kocienda
 
-# Technologies <br />
+# Technologies
 • Axios <br />
 • Java <br />
 • Spring Core <br />
@@ -19,7 +19,7 @@ Co-created with: <br />
 • TypeScript <br />
 • SQL
 
-# Roles & Responsibilities <br />
+# Roles & Responsibilities
 • Assumed ownership of liking and commenting features. <br />
 • Designed full-stack functionality for liking posts. <br />
 • Designed full-stack functionality for commenting on posts. <br />
