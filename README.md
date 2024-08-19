@@ -3,7 +3,7 @@ By Dominic Prignano <br />
 
 Co-created with: <br />
 • Alden Jack Dus <br />
-• Braxton Kennedy
+• Braxton Kennedy <br />
 • Sarina Wu
 • Zachary Christopher Kocienda
 
