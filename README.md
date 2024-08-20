@@ -1,5 +1,5 @@
 # RevConnect Full-Stack Application
-By Dominic Prignano <br />
+## By Dominic Prignano <br />
 
 Co-created with: <br />
 • Alden Jack Dus <br />
