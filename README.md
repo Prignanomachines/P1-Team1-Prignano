@@ -10,6 +10,7 @@ Co-created with: <br />
 # Technologies
 • Axios <br />
 • Java <br />
+• OpenJDK 19 <br />
 • Spring Core <br />
 • Spring Web <br />
 • Spring Data <br />
@@ -17,7 +18,7 @@ Co-created with: <br />
 • React <br />
 • JavaScript <br />
 • TypeScript <br />
-• SQL
+• PostgreSQL
 
 # Roles & Responsibilities
 • Assumed ownership of liking and commenting features. <br />
