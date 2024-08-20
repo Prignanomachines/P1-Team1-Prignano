@@ -1,5 +1,5 @@
 # RevConnect Full-Stack Application
-## By Dominic Prignano <br />
+### By Dominic Prignano <br />
 
 Co-created with: <br />
 • Alden Jack Dus <br />
@@ -7,7 +7,7 @@ Co-created with: <br />
 • Sarina Wu <br />
 • Zachary Christopher Kocienda
 
-# Technologies
+## Technologies
 • Axios <br />
 • Java <br />
 • OpenJDK 19 <br />
@@ -20,7 +20,7 @@ Co-created with: <br />
 • TypeScript <br />
 • PostgreSQL
 
-# Roles & Responsibilities
+## Roles & Responsibilities
 • Assumed ownership of liking and commenting features. <br />
 • Designed full-stack functionality for liking posts. <br />
 • Designed full-stack functionality for commenting on posts. <br />
